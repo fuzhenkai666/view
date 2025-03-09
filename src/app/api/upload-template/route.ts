@@ -24,9 +24,8 @@ export async function POST(request: Request): Promise<NextResponse> {
             });
         }
 
-        // 使用系统临时目录
-        const tempDir = os.tmpdir();
-        const wordDir = path.join(tempDir, 'word');
+        // 确保 public/word 目录存在
+        const wordDir = path.join(process.cwd(), 'public', 'word');
 
         try {
             await fs.access(wordDir);
