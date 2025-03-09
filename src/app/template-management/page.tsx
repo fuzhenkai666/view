@@ -313,7 +313,7 @@ export default function TemplateManagementPage() {
                         </div>
                         <Editor
                             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
-                            onInit={(evt: any, editor: TinyMCEEditor) => {
+                            onInit={(editor: TinyMCEEditor) => {
                                 editorRef.current = editor;
                             }}
                             value={editContent}
