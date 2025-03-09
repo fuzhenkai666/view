@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { writeFile } from 'fs/promises';
 import fs from 'fs/promises';
 import path from 'path';
+import os from 'os';
 
 export async function POST(request: Request): Promise<NextResponse> {
     try {
@@ -23,8 +24,10 @@ export async function POST(request: Request): Promise<NextResponse> {
             });
         }
 
-        // 确保 public/word 目录存在
-        const wordDir = path.join(process.cwd(), 'public', 'word');
+        // 使用系统临时目录
+        const tempDir = os.tmpdir();
+        const wordDir = path.join(tempDir, 'word');
+
         try {
             await fs.access(wordDir);
         } catch {
@@ -32,7 +35,7 @@ export async function POST(request: Request): Promise<NextResponse> {
             await fs.mkdir(wordDir, { recursive: true });
         }
 
-        // 将文件保存到 public/word 目录
+        // 将文件保存到临时目录
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
@@ -43,13 +46,16 @@ export async function POST(request: Request): Promise<NextResponse> {
         try {
             await writeFile(filePath, buffer);
 
-            return new NextResponse(JSON.stringify({ message: '文件上传成功' }), {
+            return new NextResponse(JSON.stringify({ 
+                message: '文件上传成功',
+                filePath: `/word/${fileName}` // 返回相对路径
+            }), {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
             });
         } catch (error) {
-            console.error('文件上传失败:', error);
-            return new NextResponse(JSON.stringify({ error: '文件上传失败' }), {
+            console.error('文件写入失败:', error);
+            return new NextResponse(JSON.stringify({ error: '文件写入失败' }), {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' },
             });
