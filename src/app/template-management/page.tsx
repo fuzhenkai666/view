@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import { Editor as TinyMCEEditor } from 'tinymce';
+import type { Editor as TinyMCEEditor } from 'tinymce';
 
 interface TemplateFile {
     name: string;
@@ -313,7 +313,7 @@ export default function TemplateManagementPage() {
                         </div>
                         <Editor
                             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
-                            onInit={(_evt: any, editor: TinyMCEEditor) => {
+                            onInit={(evt: any, editor: TinyMCEEditor) => {
                                 editorRef.current = editor;
                             }}
                             value={editContent}

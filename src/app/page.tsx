@@ -15,7 +15,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import HomeContent from "../components/homeContent";
+
 
 export default function Home() {
   const router = useRouter();
