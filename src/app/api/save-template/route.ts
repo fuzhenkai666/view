@@ -37,7 +37,11 @@ export async function POST(request: Request): Promise<NextResponse> {
             console.log('目标目录存在且具有写入权限:', dir);
         } catch (error) {
             console.error('目录访问权限检查失败:', error);
-            throw new Error('无法访问目标目录或缺少写入权限');
+            return new NextResponse(JSON.stringify({ error: '无法访问目标目录或缺少写入权限' }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
 
         // 将HTML内容转换为Word文档
         const docxBuffer = await HTMLToDocx(content, null, {
