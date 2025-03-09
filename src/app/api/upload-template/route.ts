@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import path from 'path';
 import { writeFile, mkdir, access, readdir } from 'fs/promises';
-import os from 'os';
-import { join } from 'path';
 
 export async function POST(request: Request): Promise<NextResponse> {
     try {
@@ -28,7 +26,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         const wordDir = path.join(process.cwd(), 'public', 'word');
         try {
             await access(wordDir);
-        } catch (error) {
+        } catch {
             // 如果目录不存在，创建它
             await mkdir(wordDir, { recursive: true });
         }
